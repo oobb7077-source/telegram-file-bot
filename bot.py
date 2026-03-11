@@ -10,10 +10,10 @@ OWNER_ID = 6495482801
 OWNER_TAG = "@Suzuka_17"
 
 CHANNELS = [
-    ("📢 Channel 1", "@channel1", "https://t.me/Otaku_Paradise_Jp"),
-    ("📢 Channel 2", "@channel2", "https://t.me/NexPlayHQ"),
-    ("📢 Channel 3", "@channel3", "https://t.me/CraftMM"),
-    ("📢 Channel 4", "@channel4", "https://t.me/Gyro_Gaming_Market")
+    ("📢 Channel 1", "@Otaku_Paradise_Jp", "https://t.me/Otaku_Paradise_Jp"),
+    ("📢 Channel 2", "@NexPlayHQ", "https://t.me/NexPlayHQ"),
+    ("📢 Channel 3", "@CraftMM", "https://t.me/CraftMM"),
+    ("📢 Channel 4", "@Gyro_Gaming_Market", "https://t.me/Gyro_Gaming_Market")
 ]
 
 app = Client("KT_FILE_BOT", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
