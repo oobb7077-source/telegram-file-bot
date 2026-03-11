@@ -1,58 +1,136 @@
-import telebot
+from pyrogram import Client, filters
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-TOKEN ="8654488281:AAFeBq9-2Gang_0r3bM7P6bBJEuV-a7hPEk"
+API_ID = 6495482801
+API_HASH ="8654488281:AAEwzgvD7aOtVafkvw8VhS8bPPghjzNXvEI"
+BOT_TOKEN = "PUT_YOUR_TOKEN_HERE"
+
 OWNER_ID = 6495482801
-bot = telebot.TeleBot(TOKEN)
 
-files = {}
+CHANNELS = [
+    ("Join Channel 1", "@channel1"),
+    ("Join Channel 2", "@channel2"),
+    ("Join Channel 3", "@channel3"),
+    ("Join Channel 4", "@channel4")
+]
 
-@bot.message_handler(commands=['start'])
-def start(message):
+app = Client("KT_TURBO_BOT", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
-    args = message.text.split()
 
-    if len(args) > 1:
-        key = args[1]
+def join_buttons():
+    buttons = [
+        [
+            InlineKeyboardButton("📢 Join Channel 1", url="https://t.me/channel1"),
+            InlineKeyboardButton("📢 Join Channel 2", url="https://t.me/channel2")
+        ],
+        [
+            InlineKeyboardButton("📢 Join Channel 3", url="https://t.me/channel3"),
+            InlineKeyboardButton("📢 Join Channel 4", url="https://t.me/channel4")
+        ],
+        [
+            InlineKeyboardButton("♻️ Try Again", callback_data="check_join")
+        ]
+    ]
+    return InlineKeyboardMarkup(buttons)
 
-        if key in files:
-            bot.send_document(message.chat.id, files[key])
-            return
+
+async def check_join(client, user_id):
+    for ch_name, ch in CHANNELS:
+        try:
+            member = await client.get_chat_member(ch, user_id)
+            if member.status in ["left", "kicked"]:
+                return False
+        except:
+            return False
+    return True
+
+
+@app.on_message(filters.command("start"))
+async def start(client, message):
+
+    joined = await check_join(client, message.from_user.id)
+
+    if not joined:
+
+        text = """
+╭━━━〔 📢 𝐉𝐎𝐈𝐍 𝐑𝐄𝐐𝐔𝐈𝐑𝐄𝐃 〕━━━╮
+┃
+┃ ⚠️ 𝐁𝐨𝐭 𝐮𝐬𝐞 𝐥𝐮𝐩𝐚
+┃ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 𝐚𝐫 𝐤𝐨𝐮𝐧𝐠 𝐣𝐨𝐢𝐧 𝐩𝐚
+┃
+┃ 📥 𝐉𝐨𝐢𝐧 𝐩𝐲𝐢𝐲 𝐭𝐚𝐡
+┃ ♻️ 𝐓𝐫𝐲 𝐀𝐠𝐚𝐢𝐧 𝐧𝐡𝐢𝐩 𝐩𝐚
+┃
+╰━━━━━━━━━━━━━━━━━━━━━━╯
+"""
+        await message.reply_text(text, reply_markup=join_buttons())
+        return
 
     text = """
-╭━━━〔 🚀 𝙏𝙐𝙍𝘽𝙊 𝙁𝙄𝙇𝙀 𝘽𝙊𝙏 〕━━━╮
-
-📤 𝙎𝙚𝙣𝙙 𝙢𝙚 𝙖 𝙛𝙞𝙡𝙚  
-🔗 𝙄 𝙬𝙞𝙡𝙡 𝙘𝙧𝙚𝙖𝙩𝙚 𝙖 𝙙𝙤𝙬𝙣𝙡𝙤𝙖𝙙 𝙡𝙞𝙣𝙠  
-
-⚡ 𝙁𝙖𝙨𝙩 | 𝙎𝙚𝙘𝙪𝙧𝙚 | 𝙀𝙖𝙨𝙮
-
-╰━━━━━━━━━━━━━━━━╯
+╭━━━〔 🚀 𝐊𝐓 𝐓𝐔𝐑𝐁𝐎 𝐁𝐎𝐓 〕━━━╮
+┃
+┃ ⚡ 𝐅𝐢𝐥𝐞 𝐒𝐭𝐨𝐫𝐚𝐠𝐞 𝐁𝐨𝐭
+┃ 🔒 𝐎𝐰𝐧𝐞𝐫 𝐎𝐧𝐥𝐲 𝐔𝐩𝐥𝐨𝐚𝐝
+┃
+┃ 📤 𝐒𝐞𝐧𝐝 𝐚 𝐅𝐢𝐥𝐞
+┃ 𝐓𝐨 𝐒𝐭𝐨𝐫𝐞
+┃
+╰━━━━━━━━━━━━━━━━━━━━━━╯
 """
-    bot.send_message(message.chat.id, text)
+    await message.reply_text(text)
 
 
-@bot.message_handler(content_types=['document'])
-def file_handler(message):
+@app.on_callback_query(filters.regex("check_join"))
+async def check_join_callback(client, query):
 
-    file_id = message.document.file_id
-    unique = message.document.file_unique_id
+    joined = await check_join(client, query.from_user.id)
 
-    files[unique] = file_id
+    if not joined:
+        await query.answer("❌ Join channels first!", show_alert=True)
+    else:
+        await query.message.edit_text(
+"""
+╭━━━〔 ✅ 𝐕𝐄𝐑𝐈𝐅𝐈𝐄𝐃 〕━━━╮
+┃
+┃ 🎉 𝐘𝐨𝐮 𝐜𝐚𝐧 𝐧𝐨𝐰
+┃ 𝐮𝐬𝐞 𝐭𝐡𝐞 𝐛𝐨𝐭
+┃
+╰━━━━━━━━━━━━━━━━━━━━━━╯
+"""
+        )
 
-    link = f"https://t.me/YOUR_BOT_USERNAME?start={unique}"
+
+@app.on_message(filters.document)
+async def file_handler(client, message):
+
+    if message.from_user.id != OWNER_ID:
+        await message.reply_text(
+"""
+╭━━━〔 ❌ 𝐀𝐂𝐂𝐄𝐒𝐒 𝐃𝐄𝐍𝐈𝐄𝐃 〕━━━╮
+┃
+┃ 🚫 𝐎𝐧𝐥𝐲 𝐁𝐨𝐭 𝐎𝐰𝐧𝐞𝐫
+┃ 𝐂𝐚𝐧 𝐔𝐩𝐥𝐨𝐚𝐝
+┃
+╰━━━━━━━━━━━━━━━━━━━━━━╯
+"""
+        )
+        return
+
+    file_name = message.document.file_name
+    size = round(message.document.file_size / (1024*1024),2)
 
     text = f"""
-╭━━━〔 ✅ 𝙁𝙄𝙇𝙀 𝙐𝙋𝙇𝙊𝘼𝘿𝙀𝘿 〕━━━╮
-
-📂 𝙁𝙞𝙡𝙚: {message.document.file_name}
-
-🔗 𝘿𝙤𝙬𝙣𝙡𝙤𝙖𝙙 𝙇𝙞𝙣𝙠
-{link}
-
-╰━━━━━━━━━━━━━━━━╯
+╭━━━〔 📦 𝐅𝐈𝐋𝐄 𝐒𝐓𝐎𝐑𝐄𝐃 〕━━━╮
+┃
+┃ 📄 𝐍𝐚𝐦𝐞 : {file_name}
+┃ 💾 𝐒𝐢𝐳𝐞 : {size} MB
+┃
+┃ ✅ 𝐔𝐩𝐥𝐨𝐚𝐝 𝐒𝐮𝐜𝐜𝐞𝐬𝐬
+┃ 👑 𝐁𝐲 : 𝐎𝐰𝐧𝐞𝐫 ➝ @Suzuka_17
+┃
+╰━━━━━━━━━━━━━━━━━━━━━━╯
 """
+    await message.reply_text(text)
 
-    bot.send_message(message.chat.id, text)
 
-
-bot.infinity_polling()
+app.run()
