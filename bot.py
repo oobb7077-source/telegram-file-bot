@@ -1,10 +1,10 @@
-from pyrogram import Client, filters
+from pyrogram import Client, filters, idle
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-
+import os
 
 API_ID = 32100091
 API_HASH = "612fe5aa877cfc69abc5a6d92019627b"
-BOT_TOKEN ="8654488281:AAEwzgvD7aOtVafkvw8VhS8bPPghjzNXvEI"
+BOT_TOKEN = "8654488281:AAHK3jdV6x3KqroxmMQbt1JX5LmBw8y5fAU"
 
 OWNER_ID = 6495482801
 OWNER_TAG = "@Suzuka_17"
@@ -99,6 +99,10 @@ async def get_file(client, message):
         await message.reply_text(text, reply_markup=join_buttons())
         return
 
+    if not os.path.exists("file.zip"):
+        await message.reply_text("❌ 𝗙𝗶𝗹𝗲 𝗡𝗼𝘁 𝗙𝗼𝘂𝗻𝗱")
+        return
+
     await message.reply_document(
         "file.zip",
         caption=f"""
@@ -122,7 +126,7 @@ async def check_again(client, query):
 
     if not joined:
 
-        await query.answer("❌ Join Channels First", show_alert=True)
+        await query.answer("❌ 𝗝𝗼𝗶𝗻 𝗖𝗵𝗮𝗻𝗻𝗲𝗹𝘀 𝗙𝗶𝗿𝘀𝘁", show_alert=True)
 
     else:
 
@@ -169,4 +173,6 @@ async def upload(client, message):
     )
 
 
-app.run()
+print("🚀 KT FILE BOT STARTED")
+app.start()
+idle()
