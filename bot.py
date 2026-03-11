@@ -1,136 +1,172 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+
 API_ID = 32100091
 API_HASH = "612fe5aa877cfc69abc5a6d92019627b"
 BOT_TOKEN ="8654488281:AAEwzgvD7aOtVafkvw8VhS8bPPghjzNXvEI"
 
 OWNER_ID = 6495482801
+OWNER_TAG = "@Suzuka_17"
 
 CHANNELS = [
-    ("Join Channel 1", "@channel1"),
-    ("Join Channel 2", "@channel2"),
-    ("Join Channel 3", "@channel3"),
-    ("Join Channel 4", "@channel4")
+    ("📢 Channel 1", "@channel1", "https://t.me/Otaku_Paradise_Jp"),
+    ("📢 Channel 2", "@channel2", "https://t.me/NexPlayHQ"),
+    ("📢 Channel 3", "@channel3", "https://t.me/CraftMM"),
+    ("📢 Channel 4", "@channel4", "https://t.me/Gyro_Gaming_Market")
 ]
 
-app = Client("KT_TURBO_BOT", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+app = Client("KT_FILE_BOT", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
 
+# JOIN BUTTONS
 def join_buttons():
-    buttons = [
+    return InlineKeyboardMarkup([
         [
-            InlineKeyboardButton("📢 Join Channel 1", url="https://t.me/channel1"),
-            InlineKeyboardButton("📢 Join Channel 2", url="https://t.me/channel2")
+            InlineKeyboardButton("📢 𝗖𝗛𝗔𝗡𝗡𝗘𝗟 𝟭", url=CHANNELS[0][2]),
+            InlineKeyboardButton("📢 𝗖𝗛𝗔𝗡𝗡𝗘𝗟 𝟮", url=CHANNELS[1][2])
         ],
         [
-            InlineKeyboardButton("📢 Join Channel 3", url="https://t.me/channel3"),
-            InlineKeyboardButton("📢 Join Channel 4", url="https://t.me/channel4")
+            InlineKeyboardButton("📢 𝗖𝗛𝗔𝗡𝗡𝗘𝗟 𝟯", url=CHANNELS[2][2]),
+            InlineKeyboardButton("📢 𝗖𝗛𝗔𝗡𝗡𝗘𝗟 𝟰", url=CHANNELS[3][2])
         ],
         [
-            InlineKeyboardButton("♻️ Try Again", callback_data="check_join")
+            InlineKeyboardButton("♻️ 𝗧𝗥𝗬 𝗔𝗚𝗔𝗜𝗡", callback_data="check_join")
         ]
-    ]
-    return InlineKeyboardMarkup(buttons)
+    ])
 
 
+# CHECK JOIN
 async def check_join(client, user_id):
-    for ch_name, ch in CHANNELS:
+
+    for name, username, link in CHANNELS:
+
         try:
-            member = await client.get_chat_member(ch, user_id)
+            member = await client.get_chat_member(username, user_id)
+
             if member.status in ["left", "kicked"]:
                 return False
+
         except:
             return False
+
     return True
 
 
+# START
 @app.on_message(filters.command("start"))
 async def start(client, message):
+
+    text = f"""
+╭━━━〔 🚀 𝗞𝗧 𝗙𝗜𝗟𝗘 𝗕𝗢𝗧 〕━━━╮
+┃
+┃ 📂 𝗙𝗶𝗹𝗲 𝗦𝘁𝗼𝗿𝗮𝗴𝗲 𝗕𝗼𝘁
+┃ 🔒 𝗖𝗵𝗮𝗻𝗻𝗲𝗹 𝗝𝗼𝗶𝗻 𝗥𝗲𝗾𝘂𝗶𝗿𝗲𝗱
+┃
+┃ 📥 𝗧𝘆𝗽𝗲 /get
+┃ 𝗧𝗼 𝗗𝗼𝘄𝗻𝗹𝗼𝗮𝗱 𝗙𝗶𝗹𝗲
+┃
+┣━━━━━━━━━━━━━━━
+┃ 👑 𝗢𝘄𝗻𝗲𝗱 𝗕𝘆 : {OWNER_TAG}
+╰━━━━━━━━━━━━━━━╯
+"""
+
+    await message.reply_text(text)
+
+
+# USER FILE REQUEST
+@app.on_message(filters.command("get"))
+async def get_file(client, message):
 
     joined = await check_join(client, message.from_user.id)
 
     if not joined:
 
-        text = """
-╭━━━〔 📢 𝐉𝐎𝐈𝐍 𝐑𝐄𝐐𝐔𝐈𝐑𝐄𝐃 〕━━━╮
+        text = f"""
+╭━━━〔 📢 𝗝𝗢𝗜𝗡 𝗙𝗜𝗥𝗦𝗧 〕━━━╮
 ┃
-┃ ⚠️ 𝐁𝐨𝐭 𝐮𝐬𝐞 𝐥𝐮𝐩𝐚
-┃ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥 𝐚𝐫 𝐤𝐨𝐮𝐧𝐠 𝐣𝐨𝐢𝐧 𝐩𝐚
+┃ ⚠️ 𝗣𝗹𝗲𝗮𝘀𝗲 𝗝𝗼𝗶𝗻
+┃ 𝗔𝗹𝗹 𝗢𝘂𝗿 𝗖𝗵𝗮𝗻𝗻𝗲𝗹𝘀
 ┃
-┃ 📥 𝐉𝐨𝐢𝐧 𝐩𝐲𝐢𝐲 𝐭𝐚𝐡
-┃ ♻️ 𝐓𝐫𝐲 𝐀𝐠𝐚𝐢𝐧 𝐧𝐡𝐢𝐩 𝐩𝐚
+┃ 📥 𝗔𝗳𝘁𝗲𝗿 𝗝𝗼𝗶𝗻
+┃ ♻️ 𝗖𝗹𝗶𝗰𝗸 𝗧𝗿𝘆 𝗔𝗴𝗮𝗶𝗻
 ┃
-╰━━━━━━━━━━━━━━━━━━━━━━╯
+┣━━━━━━━━━━━━━━━
+┃ 👑 𝗢𝘄𝗻𝗲𝗱 𝗕𝘆 : {OWNER_TAG}
+╰━━━━━━━━━━━━━━━╯
 """
+
         await message.reply_text(text, reply_markup=join_buttons())
         return
 
-    text = """
-╭━━━〔 🚀 𝐊𝐓 𝐓𝐔𝐑𝐁𝐎 𝐁𝐎𝐓 〕━━━╮
+    await message.reply_document(
+        "file.zip",
+        caption=f"""
+╭━━━〔 📦 𝗗𝗢𝗪𝗡𝗟𝗢𝗔𝗗 𝗥𝗘𝗔𝗗𝗬 〕━━━╮
 ┃
-┃ ⚡ 𝐅𝐢𝐥𝐞 𝐒𝐭𝐨𝐫𝐚𝐠𝐞 𝐁𝐨𝐭
-┃ 🔒 𝐎𝐰𝐧𝐞𝐫 𝐎𝐧𝐥𝐲 𝐔𝐩𝐥𝐨𝐚𝐝
+┃ ✅ 𝗝𝗼𝗶𝗻 𝗩𝗲𝗿𝗶𝗳𝗶𝗲𝗱
+┃ ⬇️ 𝗙𝗶𝗹𝗲 𝗦𝗲𝗻𝘁
 ┃
-┃ 📤 𝐒𝐞𝐧𝐝 𝐚 𝐅𝐢𝐥𝐞
-┃ 𝐓𝐨 𝐒𝐭𝐨𝐫𝐞
-┃
-╰━━━━━━━━━━━━━━━━━━━━━━╯
+┣━━━━━━━━━━━━━━━
+┃ 👑 𝗢𝘄𝗻𝗲𝗱 𝗕𝘆 : {OWNER_TAG}
+╰━━━━━━━━━━━━━━━╯
 """
-    await message.reply_text(text)
+    )
 
 
+# TRY AGAIN
 @app.on_callback_query(filters.regex("check_join"))
-async def check_join_callback(client, query):
+async def check_again(client, query):
 
     joined = await check_join(client, query.from_user.id)
 
     if not joined:
-        await query.answer("❌ Join channels first!", show_alert=True)
+
+        await query.answer("❌ Join Channels First", show_alert=True)
+
     else:
+
         await query.message.edit_text(
 """
-╭━━━〔 ✅ 𝐕𝐄𝐑𝐈𝐅𝐈𝐄𝐃 〕━━━╮
+╭━━━〔 ✅ 𝗩𝗘𝗥𝗜𝗙𝗜𝗘𝗗 〕━━━╮
 ┃
-┃ 🎉 𝐘𝐨𝐮 𝐜𝐚𝐧 𝐧𝐨𝐰
-┃ 𝐮𝐬𝐞 𝐭𝐡𝐞 𝐛𝐨𝐭
+┃ 🎉 𝗝𝗼𝗶𝗻 𝗖𝗼𝗺𝗽𝗹𝗲𝘁𝗲
 ┃
-╰━━━━━━━━━━━━━━━━━━━━━━╯
+┃ 📥 𝗡𝗼𝘄 𝗧𝘆𝗽𝗲 /get
+┃
+╰━━━━━━━━━━━━━━━╯
 """
         )
 
 
+# OWNER FILE UPLOAD
 @app.on_message(filters.document)
-async def file_handler(client, message):
+async def upload(client, message):
 
     if message.from_user.id != OWNER_ID:
+
         await message.reply_text(
 """
-╭━━━〔 ❌ 𝐀𝐂𝐂𝐄𝐒𝐒 𝐃𝐄𝐍𝐈𝐄𝐃 〕━━━╮
+╭━━━〔 ❌ 𝗔𝗖𝗖𝗘𝗦𝗦 𝗗𝗘𝗡𝗜𝗘𝗗 〕━━━╮
 ┃
-┃ 🚫 𝐎𝐧𝐥𝐲 𝐁𝐨𝐭 𝐎𝐰𝐧𝐞𝐫
-┃ 𝐂𝐚𝐧 𝐔𝐩𝐥𝐨𝐚𝐝
+┃ 🚫 𝗢𝗻𝗹𝘆 𝗕𝗼𝘁 𝗢𝘄𝗻𝗲𝗿
+┃ 𝗖𝗮𝗻 𝗨𝗽𝗹𝗼𝗮𝗱
 ┃
-╰━━━━━━━━━━━━━━━━━━━━━━╯
+╰━━━━━━━━━━━━━━━╯
 """
         )
         return
 
-    file_name = message.document.file_name
-    size = round(message.document.file_size / (1024*1024),2)
-
-    text = f"""
-╭━━━〔 📦 𝐅𝐈𝐋𝐄 𝐒𝐓𝐎𝐑𝐄𝐃 〕━━━╮
-┃
-┃ 📄 𝐍𝐚𝐦𝐞 : {file_name}
-┃ 💾 𝐒𝐢𝐳𝐞 : {size} MB
-┃
-┃ ✅ 𝐔𝐩𝐥𝐨𝐚𝐝 𝐒𝐮𝐜𝐜𝐞𝐬𝐬
-┃ 👑 𝐁𝐲 : 𝐎𝐰𝐧𝐞𝐫 ➝ @Suzuka_17
-┃
-╰━━━━━━━━━━━━━━━━━━━━━━╯
+    await message.reply_text(
 """
-    await message.reply_text(text)
+╭━━━〔 📦 𝗙𝗜𝗟𝗘 𝗦𝗔𝗩𝗘𝗗 〕━━━╮
+┃
+┃ ✅ 𝗙𝗶𝗹𝗲 𝗦𝘁𝗼𝗿𝗲𝗱
+┃ 👑 𝗢𝘄𝗻𝗲𝗿 𝗨𝗽𝗹𝗼𝗮𝗱
+┃
+╰━━━━━━━━━━━━━━━╯
+"""
+    )
 
 
 app.run()
