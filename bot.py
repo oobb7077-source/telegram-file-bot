@@ -1,9 +1,9 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-API_ID = 6495482801
-API_HASH ="8654488281:AAEwzgvD7aOtVafkvw8VhS8bPPghjzNXvEI"
-BOT_TOKEN = "PUT_YOUR_TOKEN_HERE"
+API_ID = 32100091
+API_HASH = "612fe5aa877cfc69abc5a6d92019627b"
+BOT_TOKEN ="8654488281:AAEwzgvD7aOtVafkvw8VhS8bPPghjzNXvEI"
 
 OWNER_ID = 6495482801
 
